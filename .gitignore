@@ -6,12 +6,21 @@ bin-release/
 
 # Other files and folders
 .settings/
+node_modules
+package-lock.json
+*.code-workspace
+.DS_Store
+.env
+.cmproj
 
 # Executables
 *.swf
 *.air
 *.ipa
 *.apk
+*.pxm
+*.mp4
+*.mov
 
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important
