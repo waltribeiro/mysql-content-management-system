@@ -3,22 +3,22 @@ const inquirer = require("inquirer");
 // const cTable = require('console.table');
 const PORT = process.env.PORT || 8080;
 
-// require('dotenv').config()
-// const connection = mysql.createConnection({
-//   host: process.env.DB_HOST,
-//   user: process.env.DB_USER,
-//   password: process.env.DB_PASS,
-//   database: process.env.DB_DATABASE
-// })
-
 require('dotenv').config()
 const connection = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "FRZ3qpy>&n4",
-    database: "employeeSystemDB",
-    port: 3306
-});
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_DATABASE
+})
+
+// require('dotenv').config()
+// const connection = mysql.createConnection({
+//     host: "localhost",
+//     user: "root",
+//     password: "FRZ3qpy>&n4dda&%fjoMgfsnj#%",
+//     database: "employeeSystemDB",
+//     port: 3306
+// });
 
 connection.connect(function(err) {
     if(err) {

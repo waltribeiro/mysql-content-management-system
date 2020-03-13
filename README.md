@@ -13,8 +13,8 @@ Thie is a command-line application that allows you to:
 
 ## Screenshot
 
-![MySQL Content Management System 1](img/employee-tracker.gif)
-![MySQL Content Management System 2](img/schema.png)
+![MySQL Content Management System 1](img/mysql-content-management-system.gif)
+<!-- ![MySQL Content Management System 2](img/schema.png) -->
 
 ## Technologies
 
