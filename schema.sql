@@ -1,13 +1,27 @@
-DROP DATABASE IF EXISTS greatBay_DB;
-CREATE DATABASE greatBay_DB;
+DROP DATABASE IF EXISTS employeeSystemDB;
+CREATE database employeeSystemDB;
 
-USE greatBay_DB;
+USE employeeSystemDB;
 
-CREATE TABLE auctions(
-  id INT NOT NULL AUTO_INCREMENT,
-  item_name VARCHAR(100) NOT NULL,
-  category VARCHAR(45) NOT NULL,
-  starting_bid INT default 0,
-  highest_bid INT default 0,
+CREATE TABLE department (
+  id INT UNSIGNED AUTO_INCREMENT NOT NULL,
+  name VARCHAR(30),
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE role ( 
+  id INT UNSIGNED AUTO_INCREMENT NOT NULL,
+  title VARCHAR(30),
+  salary DECIMAL NOT NULL,
+  department_id INT NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE employee ( 
+  id INT UNSIGNED AUTO_INCREMENT NOT NULL,
+  first_name VARCHAR(30),
+  last_name VARCHAR(30),
+  role_id INT,
+  manager_id INT,
   PRIMARY KEY (id)
 );

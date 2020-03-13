@@ -1,77 +1,72 @@
-// fix my website CSS
-// do GIFs increase human resource interest?
-// help make my password generator work
-// help make my piano play notes while looping
-// how do I get open source stuff into my app?
-
-
-const bids = [];
+const mysql = require("mysql");
 const inquirer = require("inquirer");
-const fs = require("fs");
 
-const bidderQuestions = [
-    {
-        type: "list",
-        message: "Would you like to post or bid?",
-        choices: ["post", "bid", "exit"],
-        name: "postOrBid"
-    },
-    {
-        type: "input",
-        message: "What is the item you would like to post?",
-        name: "postItem"
-    },
-    {
-        type: "list",
-        message: "What category would you like to place your auction in?",
-        choices: ["electronics", "antiques", "fashion", "toys", "misc"],
-        name: "chosenCategory"
-    },
-    {
-        type: "input",
-        message: "What would you like your starting bid to be?",
-        name: "startingBid"
-    },
-    {
-        type: "list",
-        message: "Would you like continue bidding?",
-        choices: ["yes", "no"],
-        name: "continueBidding"
-    },
-];
+const PORT = process.env.PORT || 8080;
 
-
-
-function bidOnItem() {
-    RTCPeerConnection.query("SELECT * FROM products", function (err, data) {
-        if (err)
-            throw err;
-
-            // console.log(data);
-            const productArr = [];
-
-            for (let i = 0; i < data.length; i++) {
-                productArr.data.push(data[i].name)
-            }
-    })
-}
-console.log(data);
-console.log(productArr);
-
-inquirer.prompt([
-    {
-    name: "whichProduct",
-    message: "Choose a product to bibd on",
-    type: "rawlist",
-    choices: productArr,
-    },
-    {
-        name: "bidPrice",
-        message: "What is the bid price?",
-        type: "input",
-        choices: productArr,
-    },
-]).then(function(productAnswers) {
-    console.log(productAnswers);
+const connection = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "FRZ3qpy>&n4",
+    database: "employeeSystemDB",
+    port: 3306
 });
 
+connection.connect(function(err) {
+    if(err) {
+        console.error("error connecting: " + err.stack);
+        return
+    }
+    console.log("connected as id " + connection.threadId);
+
+    askQuestions();
+
+  });
+
+  function askQuestions() {
+    inquirer.prompt([
+      {
+        name: "menuChoices",
+        type: "list",
+        message: "Please select from the options in the menu",
+        choices: ["Add Department", "View Department", "Add Role", "View Roles", "Add Employee", "View Employees", "Exit"]
+      }
+    ]).then(function(menuAnswers) {
+      if(menuAnswers.menuChoices === "Add Department") {
+          addDept();
+      } else if (menuAnswers.menuChoices === "View Department") {
+          viewDept();
+      } else if (menuAnswers.menuChoices === "Add Role") {
+          addRole();
+      } else if (menuAnswers.menuChoices === "View Roles") {
+          viewRoles();
+      } else if (menuAnswers.menuChoices === "Add Employee") {
+          addEmployee();
+      } else if (menuAnswers.menuChoices === "View Employees") {
+          viewEmployees();
+      } else {
+        connection.end();
+      }
+    });
+  }
+
+  function addDept() {
+    inquirer.prompt([
+      {
+        name: "deptName",
+        type: "input",
+        message: "Please enter the department name:"
+      }
+    ]).then(function(deptAnswers) {
+      const departmentName = deptAnswers.deptName;
+
+      connection.query("INSERT INTO department(name) VALUES(?)", [departmentName], function(err, data) {
+        if (err) {
+          throw err;
+        }
+        console.log(`${departmentName} was added successfully!`)
+
+        askQuestions();
+      })
+    });
+
+  }
