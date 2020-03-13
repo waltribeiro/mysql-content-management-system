@@ -103,12 +103,12 @@ function addRole() {
     {
       type: "input",
       name: "salary",
-      message: "What is the salary of this role?"
+      message: "Please enter the salary of this role:"
     },
     {
       type: "input",
       name: "departmentId",
-      message: "What is the department ID?"
+      message: "Please enter the department ID:"
     }
   ])
     .then(function (roleAnswers) {
@@ -146,12 +146,12 @@ function addEmployee() {
     {
       type: "input",
       name: "firstName",
-      message: "Please Enter Employee's First Name:"
+      message: "Please enter Employee's first name:"
     },
     {
       type: "input",
       name: "lastName",
-      message: "Please Enter Employee's Last Name:"
+      message: "Please enter Employee's last name:"
     },
 
   ])
