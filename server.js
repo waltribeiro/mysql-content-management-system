@@ -1,8 +1,17 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-
+// const cTable = require('console.table');
 const PORT = process.env.PORT || 8080;
 
+// require('dotenv').config()
+// const connection = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASS,
+//   database: process.env.DB_DATABASE
+// })
+
+require('dotenv').config()
 const connection = mysql.createConnection({
     host: "localhost",
     user: "root",
@@ -28,7 +37,7 @@ connection.connect(function(err) {
         name: "menuChoices",
         type: "list",
         message: "Please select from the options in the menu",
-        choices: ["Add Department", "View Department", "Add Role", "View Roles", "Add Employee", "View Employees", "Exit"]
+        choices: ["Add Department", "View Department", "Add Role", "View Role", "Add Employee", "View Employee", "Exit"]
       }
     ]).then(function(menuAnswers) {
       if(menuAnswers.menuChoices === "Add Department") {
@@ -37,36 +46,139 @@ connection.connect(function(err) {
           viewDept();
       } else if (menuAnswers.menuChoices === "Add Role") {
           addRole();
-      } else if (menuAnswers.menuChoices === "View Roles") {
-          viewRoles();
+      } else if (menuAnswers.menuChoices === "View Role") {
+          viewRole();
       } else if (menuAnswers.menuChoices === "Add Employee") {
           addEmployee();
-      } else if (menuAnswers.menuChoices === "View Employees") {
-          viewEmployees();
+      } else if (menuAnswers.menuChoices === "View Employee") {
+          viewEmployee();
       } else {
         connection.end();
       }
     });
   }
 
-  function addDept() {
-    inquirer.prompt([
-      {
-        name: "deptName",
-        type: "input",
-        message: "Please enter the department name:"
+// Add Department
+function addDept() {
+  inquirer.prompt([
+    {
+      name: "deptName",
+      type: "input",
+      message: "Please enter the department name:"
+    }
+  ]).then(function(deptAnswers) {
+    const departmentName = deptAnswers.deptName;
+
+    connection.query("INSERT INTO department(name) VALUES(?)", [departmentName], function(err, data) {
+      if (err) {
+        throw err;
       }
-    ]).then(function(deptAnswers) {
-      const departmentName = deptAnswers.deptName;
+      console.log(`${departmentName} was added successfully!`)
 
-      connection.query("INSERT INTO department(name) VALUES(?)", [departmentName], function(err, data) {
-        if (err) {
-          throw err;
+      askQuestions();
+    })
+  });
+
+}
+
+// View Department
+function viewDept() {
+  connection.query("SELECT * FROM department", function (err, data) {
+    if (err) {
+      throw err;
+    }
+    // console.table(data);
+    askQuestions();
+  })
+}
+
+// Add Role
+function addRole() {
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "roleName",
+      message: "Please enter the title of the role:"
+    },
+    {
+      type: "input",
+      name: "salary",
+      message: "What is the salary of this role?"
+    },
+    {
+      type: "input",
+      name: "departmentId",
+      message: "What is the department ID?"
+    }
+  ])
+    .then(function (roleAnswers) {
+      const roleName = roleAnswers.roleName;
+      const salary = roleAnswers.salary;
+      const deptId = roleAnswers.departmentId;
+
+      connection.query(`INSERT INTO role(title, salary , department_id) VALUES('${roleName}', ${salary}, ${deptId})`,
+        function (err, data) {
+          if (err) {
+            throw err;
+          }
+          console.log(`${roleName} was added successfully!`);
+          //console.table(data);
+          askQuestions();
         }
-        console.log(`${departmentName} was added successfully!`)
+      )
+    })
+}
 
-        askQuestions();
-      })
-    });
+//View Role 
+function viewRole() {
+  connection.query("SELECT * FROM role", function (err, data) {
+    if (err) {
+      throw err;
+    }
+    console.table(data);
+    askQuestions();
+  })
+}
 
-  }
+// Add Employee
+function addEmployee() {
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "firstName",
+      message: "Please Enter Employee's First Name:"
+    },
+    {
+      type: "input",
+      name: "lastName",
+      message: "Please Enter Employee's Last Name:"
+    },
+
+  ])
+    .then(function (employeeAnswers) {
+      const firstName = employeeAnswers.firstName;
+      const lastName = employeeAnswers.lastName;
+
+      connection.query(`INSERT INTO employee(first_name, last_name) VALUES('${firstName}', '${lastName}')`,
+        function (err, data) {
+          if (err) {
+            throw err;
+          }
+          console.log(`${firstName} was added successfully!`);
+          //console.table(data);
+          askQuestions();
+        }
+      )
+    })
+}
+
+// View Employee
+function viewEmployee() {
+  connection.query("SELECT * FROM employee", function (err, data) {
+    if (err) {
+      throw err;
+    }
+    // console.table(data);
+    askQuestions();
+  })
+}
